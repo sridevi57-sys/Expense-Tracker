@@ -1,0 +1,14 @@
+<svg width="640" height="360" viewBox="0 0 640 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="360" rx="28" fill="#132236"/>
+  <rect x="54" y="50" width="532" height="260" rx="20" fill="#1A314B"/>
+  <rect x="90" y="90" width="462" height="42" rx="10" fill="#233D60"/>
+  <rect x="90" y="146" width="462" height="42" rx="10" fill="#233D60"/>
+  <rect x="90" y="202" width="462" height="42" rx="10" fill="#233D60"/>
+  <rect x="108" y="103" width="150" height="16" rx="6" fill="#9DB8DD"/>
+  <rect x="108" y="159" width="120" height="16" rx="6" fill="#9DB8DD"/>
+  <rect x="108" y="215" width="170" height="16" rx="6" fill="#9DB8DD"/>
+  <rect x="486" y="99" width="52" height="24" rx="8" fill="#EF4444"/>
+  <rect x="486" y="155" width="52" height="24" rx="8" fill="#EF4444"/>
+  <rect x="486" y="211" width="52" height="24" rx="8" fill="#EF4444"/>
+  <text x="88" y="286" fill="#AFC4E6" font-family="Segoe UI, Arial, sans-serif" font-size="18">Review, delete, and clear session data</text>
+</svg>

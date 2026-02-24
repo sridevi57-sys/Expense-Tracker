@@ -1,0 +1,149 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="app__header">
+      <h1>Expense Tracker</h1>
+      <p id="header-remaining-balance" class="header-balance">Remaining Balance: &#8377;0.00</p>
+    </header>
+
+    <section class="card">
+      <h2 class="title-with-icon"><span class="title-icon">&#129534;</span>Quick Navigation</h2>
+      <div class="guide-grid">
+        <button class="guide-card is-active" type="button" data-target="add-expense-section">
+          <img src="assets/step-add.svg" alt="Add expenses step" />
+          <h3>1. Add Expense</h3>
+          <p>Enter title, amount, category, and date.</p>
+        </button>
+        <button class="guide-card" type="button" data-target="charts-section">
+          <img src="assets/step-visualize.svg" alt="View graphs step" />
+          <h3>2. View Graphs</h3>
+          <p>Track category and date-wise spending.</p>
+        </button>
+        <button class="guide-card" type="button" data-target="expenses-section">
+          <img src="assets/step-manage.svg" alt="Manage expenses step" />
+          <h3>3. Manage List</h3>
+          <p>Delete entries or clear session data.</p>
+        </button>
+        <button class="guide-card" type="button" data-target="balance-section">
+          <img src="assets/step-balance.svg" alt="Balance tracker step" />
+          <h3>4. Balance</h3>
+          <p>Set income and view remaining balance.</p>
+        </button>
+      </div>
+    </section>
+
+    <section class="card tab-section" id="add-expense-section">
+      <h2 class="title-with-icon"><span class="title-icon">&#10133;</span>Add Expense</h2>
+      <form id="expense-form" class="form" autocomplete="off">
+        <div class="field">
+          <label for="title">Title</label>
+          <input id="title" name="title" type="text" placeholder="Groceries" required maxlength="60" />
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="amount">Amount</label>
+            <input id="amount" name="amount" type="number" min="0.01" step="0.01" placeholder="120.00" required />
+          </div>
+
+          <div class="field">
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+              <option value="Food">Food</option>
+              <option value="Transport">Transport</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Bills">Bills</option>
+              <option value="Health">Health</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="date">Date</label>
+            <input id="date" name="date" type="date" required />
+          </div>
+
+          <div class="field">
+            <label for="notes">Notes (optional)</label>
+            <input id="notes" name="notes" type="text" maxlength="100" placeholder="Cash payment" />
+          </div>
+        </div>
+
+        <button type="submit" class="btn">Add Expense</button>
+      </form>
+    </section>
+
+    <section class="summary-grid tab-section is-hidden" id="summary-section">
+      <article class="card stat">
+        <h2 class="title-with-icon"><span class="title-icon">&#128178;</span>Total</h2>
+        <p id="total-amount">&#8377;0.00</p>
+      </article>
+      <article class="card stat">
+        <h2 class="title-with-icon"><span class="title-icon">&#128196;</span>Entries</h2>
+        <p id="total-count">0</p>
+      </article>
+      <article class="card stat">
+        <h2 class="title-with-icon"><span class="title-icon">&#11088;</span>Highest Category</h2>
+        <p id="top-category">-</p>
+      </article>
+    </section>
+
+    <section class="chart-grid tab-section is-hidden" id="charts-section">
+      <article class="card">
+        <h2 class="title-with-icon"><span class="title-icon">&#128202;</span>Spending by Category</h2>
+        <canvas id="category-chart" class="chart-canvas" aria-label="Category expense chart"></canvas>
+        <p id="category-chart-empty" class="chart-empty" hidden>Add expenses to view category chart.</p>
+        <p id="bar-detail" class="chart-empty">Click a bar to view category details.</p>
+      </article>
+    </section>
+
+    <section class="card tab-section is-hidden" id="expenses-section">
+      <div class="list-header">
+        <h2 class="title-with-icon"><span class="title-icon">&#128221;</span>Expenses</h2>
+        <button id="clear-all" class="btn btn--danger" type="button">Clear Session Data</button>
+      </div>
+      <ul id="expense-list" class="expense-list"></ul>
+      <p id="empty-state" class="empty-state">No expenses added yet.</p>
+    </section>
+
+    <section class="card tab-section is-hidden" id="balance-section">
+      <h2 class="title-with-icon"><span class="title-icon">&#9878;</span>Balance Overview</h2>
+      <form id="income-form" class="form" autocomplete="off">
+        <div class="field">
+          <label for="income">Total Income</label>
+          <input id="income" name="income" type="number" min="0" step="0.01" placeholder="50000" required />
+        </div>
+        <button type="submit" class="btn">Save Income</button>
+      </form>
+
+      <div class="balance-grid">
+        <article class="card stat">
+          <h2 class="title-with-icon"><span class="title-icon">&#128184;</span>Total Income</h2>
+          <p id="income-total">&#8377;0.00</p>
+        </article>
+        <article class="card stat">
+          <h2 class="title-with-icon"><span class="title-icon">&#128184;</span>Total Expenses</h2>
+          <p id="expenses-total">&#8377;0.00</p>
+        </article>
+        <article class="card stat">
+          <h2 class="title-with-icon"><span class="title-icon">&#128176;</span>Remaining Balance</h2>
+          <p id="remaining-balance">&#8377;0.00</p>
+        </article>
+      </div>
+
+      <p id="balance-caution" class="caution-note" hidden>Caution: balance has reached 100 or lower.</p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
