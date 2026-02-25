@@ -9,7 +9,24 @@
 <body>
   <main class="app">
     <header class="app__header">
-      <h1>Expense Tracker</h1>
+      <div class="app__header-row">
+        <h1>Expense Tracker</h1>
+        <div class="header-actions">
+          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">Light Mode</button>
+          <div class="settings-menu-wrap">
+            <button id="settings-toggle" class="theme-toggle" type="button" aria-label="Open settings">Settings</button>
+            <div id="settings-menu" class="settings-menu is-hidden">
+              <button type="button" data-settings-action="profile">Profile</button>
+              <button type="button" data-settings-action="goals">Goals & Savings</button>
+              <button type="button" data-settings-action="budget">Budget Monitor</button>
+              <button type="button" data-settings-action="period">Period Analysis</button>
+              <button type="button" data-settings-action="expenses">Expenses</button>
+              <button type="button" data-settings-action="old-data">Old Data</button>
+              <button type="button" data-settings-action="download">Download Options</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <p id="header-remaining-balance" class="header-balance">Remaining Balance: &#8377;0.00</p>
     </header>
 
@@ -39,8 +56,21 @@
       </div>
     </section>
 
-    <section class="card tab-section" id="add-expense-section">
+    <section class="card tab-section expense-form-card" id="add-expense-section">
       <h2 class="title-with-icon"><span class="title-icon">&#10133;</span>Add Expense</h2>
+      <div class="fx-layer" aria-hidden="true">
+        <span id="wallet-icon" class="wallet-icon">&#128091;</span>
+        <span id="receipt-fx" class="receipt-fx">&#129534;</span>
+        <div id="coin-burst" class="coin-burst">
+          <span class="coin"></span><span class="coin"></span><span class="coin"></span>
+          <span class="coin"></span><span class="coin"></span><span class="coin"></span>
+        </div>
+        <span id="food-morph" class="food-morph">&#127828;</span>
+        <div id="split-fragments" class="split-fragments">
+          <span id="split-left" class="fragment"></span>
+          <span id="split-right" class="fragment"></span>
+        </div>
+      </div>
       <form id="expense-form" class="form" autocomplete="off">
         <div class="field">
           <label for="title">Title</label>
@@ -78,6 +108,13 @@
           </div>
         </div>
 
+        <div class="field field--inline">
+          <label for="split-bill">
+            <input id="split-bill" name="split_bill" type="checkbox" />
+            Split bill into 2 parts
+          </label>
+        </div>
+
         <button type="submit" class="btn">Add Expense</button>
       </form>
     </section>
@@ -104,19 +141,108 @@
         <p id="category-chart-empty" class="chart-empty" hidden>Add expenses to view category chart.</p>
         <p id="bar-detail" class="chart-empty">Click a bar to view category details.</p>
       </article>
+      <article class="card">
+        <h2 class="title-with-icon"><span class="title-icon">&#127849;</span>Category Donut</h2>
+        <canvas id="donut-chart" class="chart-canvas" aria-label="Category donut chart"></canvas>
+        <p id="donut-chart-empty" class="chart-empty" hidden>Add expenses to view donut chart.</p>
+      </article>
+      <article class="card" id="budget-card">
+        <h2 class="title-with-icon"><span class="title-icon">&#128200;</span>Budget Monitor</h2>
+        <form id="budget-form" class="field-row budget-form" autocomplete="off">
+          <div class="field">
+            <label for="budget-category">Category Budget</label>
+            <select id="budget-category" name="budget_category" required>
+              <option value="Food">Food</option>
+              <option value="Transport">Transport</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Bills">Bills</option>
+              <option value="Health">Health</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="budget-amount">Monthly Budget</label>
+            <input id="budget-amount" name="budget_amount" type="number" min="0" step="0.01" placeholder="5000" required />
+          </div>
+          <button type="submit" class="btn btn--secondary">Save Budget</button>
+        </form>
+        <div class="liquid-shell">
+          <div id="liquid-fill" class="liquid-fill"></div>
+          <div class="liquid-meta">
+            <p id="budget-progress-label">0%</p>
+            <p id="budget-progress-detail">No budget set for selected category.</p>
+          </div>
+        </div>
+      </article>
+      <article class="card" id="period-analysis-card">
+        <h2 class="title-with-icon"><span class="title-icon">&#128197;</span>Period Analysis</h2>
+        <div class="month-switch">
+          <button id="month-prev" class="btn btn--secondary" type="button">Prev Month</button>
+          <span id="month-label" class="month-label"></span>
+          <button id="month-next" class="btn btn--secondary" type="button">Next Month</button>
+        </div>
+        <div class="period-grid">
+          <div class="period-item">
+            <p>Today</p>
+            <strong id="day-spend">&#8377;0.00</strong>
+          </div>
+          <div class="period-item">
+            <p>This Week</p>
+            <strong id="week-spend">&#8377;0.00</strong>
+          </div>
+          <div class="period-item">
+            <p>Selected Month</p>
+            <strong class="odometer" id="month-spend-odometer">
+              <span id="month-spend-current">&#8377;0.00</span>
+              <span id="month-spend-next">&#8377;0.00</span>
+            </strong>
+          </div>
+        </div>
+      </article>
+      <article class="card insights-card" id="insights-card">
+        <h2 class="title-with-icon"><span class="title-icon">&#129504;</span>Smart Insights</h2>
+        <p id="ai-tip-text" class="chart-empty">Add a few expenses to get AI-style insights.</p>
+        <div id="spike-alert" class="spike-alert" aria-hidden="true">&#9889;</div>
+        <canvas id="comparison-sparkline" class="sparkline-canvas" aria-label="Comparison sparkline"></canvas>
+        <p id="sparkline-empty" class="chart-empty">Sparkline appears once expenses are available.</p>
+      </article>
     </section>
 
     <section class="card tab-section is-hidden" id="expenses-section">
       <div class="list-header">
         <h2 class="title-with-icon"><span class="title-icon">&#128221;</span>Expenses</h2>
-        <button id="clear-all" class="btn btn--danger" type="button">Clear Session Data</button>
+        <div class="list-actions" id="download-options">
+          <button id="export-csv" class="btn btn--secondary" type="button">Export CSV</button>
+          <button id="export-json" class="btn btn--secondary" type="button">Export JSON</button>
+          <button id="export-backup" class="btn btn--secondary" type="button">Export Full Backup</button>
+          <button id="clear-all" class="btn btn--danger" type="button">Clear Session Data</button>
+        </div>
       </div>
       <ul id="expense-list" class="expense-list"></ul>
       <p id="empty-state" class="empty-state">No expenses added yet.</p>
+      <article class="card old-data" id="old-data-section">
+        <h2 class="title-with-icon"><span class="title-icon">&#128340;</span>Old Data</h2>
+        <ul id="old-data-list" class="old-data-list"></ul>
+        <p id="old-data-empty" class="chart-empty">No historical data available yet.</p>
+      </article>
     </section>
 
     <section class="card tab-section is-hidden" id="balance-section">
       <h2 class="title-with-icon"><span class="title-icon">&#9878;</span>Balance Overview</h2>
+      <article class="card profile-card" id="profile-section">
+        <h2 class="title-with-icon"><span class="title-icon">&#128100;</span>Profile</h2>
+        <form id="profile-form" class="field-row profile-form" autocomplete="off">
+          <div class="field">
+            <label for="profile-name">Name</label>
+            <input id="profile-name" name="profile_name" type="text" maxlength="50" placeholder="Your name" />
+          </div>
+          <div class="field">
+            <label for="profile-email">Email</label>
+            <input id="profile-email" name="profile_email" type="email" maxlength="80" placeholder="name@example.com" />
+          </div>
+          <button type="submit" class="btn btn--secondary">Save Profile</button>
+        </form>
+      </article>
       <form id="income-form" class="form" autocomplete="off">
         <div class="field">
           <label for="income">Total Income</label>
@@ -141,6 +267,49 @@
       </div>
 
       <p id="balance-caution" class="caution-note" hidden>Caution: balance has reached 100 or lower.</p>
+
+      <article class="card goals-card" id="goals-card">
+        <h2 class="title-with-icon"><span class="title-icon">&#127919;</span>Goals & Savings</h2>
+        <form id="goals-form" class="field-row goals-form" autocomplete="off">
+          <div class="field">
+            <label for="goal-name">Goal Name</label>
+            <input id="goal-name" name="goal_name" type="text" maxlength="50" placeholder="Laptop Fund" />
+          </div>
+          <div class="field">
+            <label for="goal-target">Goal Target</label>
+            <input id="goal-target" name="goal_target" type="number" min="0" step="0.01" placeholder="50000" />
+          </div>
+          <div class="field">
+            <label for="goal-current">Current Savings</label>
+            <input id="goal-current" name="goal_current" type="number" min="0" step="0.01" placeholder="10000" />
+          </div>
+          <div class="field">
+            <label for="emergency-target">Emergency Fund Target</label>
+            <input id="emergency-target" name="emergency_target" type="number" min="0" step="0.01" placeholder="20000" />
+          </div>
+          <button type="submit" class="btn btn--secondary">Save Goals</button>
+        </form>
+
+        <div class="goals-visuals">
+          <div class="thermo-wrap">
+            <p id="goal-progress-text">Progress: 0%</p>
+            <div class="thermometer">
+              <div id="thermo-fill" class="thermo-fill"></div>
+            </div>
+          </div>
+          <div id="piggy-wrap" class="piggy-wrap" aria-hidden="true">
+            <span class="piggy">&#128022;</span>
+            <div class="confetti-burst">
+              <span class="confetti"></span><span class="confetti"></span><span class="confetti"></span>
+              <span class="confetti"></span><span class="confetti"></span><span class="confetti"></span>
+            </div>
+          </div>
+          <div class="lock-wrap">
+            <p>Emergency Fund Status</p>
+            <span id="emergency-lock" class="lock-icon locked">&#128274;</span>
+          </div>
+        </div>
+      </article>
     </section>
   </main>
 
