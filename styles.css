@@ -1,37 +1,36 @@
 ﻿:root {
-  --bg: #161b2c;
-  --bg-accent: #25324f;
-  --surface: #2a3553;
-  --surface-2: #313f62;
-  --text: #edf2ff;
-  --muted: #bec9e6;
-  --border: #3a476a;
-  --primary: #7c8cff;
-  --primary-hover: #6f7fff;
-  --danger: #ef4444;
-  --shadow: 10px 10px 22px rgba(8, 12, 24, 0.55), -8px -8px 20px rgba(62, 78, 120, 0.45);
-  --clay-inset: inset 2px 2px 4px rgba(255, 255, 255, 0.08), inset -2px -2px 4px rgba(11, 15, 28, 0.45);
-  --chart-track: #22324a;
-  --chart-bar: #8a9aff;
+  --bg: #f6f1ff;
+  --bg-accent: #e9f5ff;
+  --surface: #fefbff;
+  --surface-2: #f3f8ff;
+  --text: #4a4f73;
+  --muted: #7f87aa;
+  --border: #dbe4f5;
+  --primary: #8b9df8;
+  --primary-hover: #7b8ef0;
+  --danger: #e28b9c;
+  --shadow: 10px 10px 22px rgba(204, 197, 230, 0.62), -10px -10px 22px rgba(255, 255, 255, 0.94);
+  --clay-inset: inset 2px 2px 5px rgba(255, 255, 255, 0.92), inset -2px -2px 5px rgba(204, 197, 230, 0.45);
+  --chart-track: #d9e6fb;
+  --chart-bar: #9bb0ff;
 }
 
 html[data-theme="light"] {
-  --bg: #dde6f8;
-  --bg-accent: #cddaf4;
-  --surface: #e6eeff;
-  --surface-2: #f0f5ff;
-  --text: #1d2a48;
-  --muted: #5e6d89;
-  --border: #c8d6ee;
-  --primary: #6078ff;
-  --primary-hover: #536de8;
-  --danger: #c62828;
-  --shadow: 10px 10px 22px rgba(163, 181, 216, 0.75), -10px -10px 20px rgba(255, 255, 255, 0.9);
-  --clay-inset: inset 2px 2px 4px rgba(255, 255, 255, 0.95), inset -2px -2px 4px rgba(170, 188, 221, 0.65);
-  --chart-track: #d5e2f4;
-  --chart-bar: #6078ff;
+  --bg: #fff6ef;
+  --bg-accent: #eef7ff;
+  --surface: #fffefd;
+  --surface-2: #f8fbff;
+  --text: #4f567a;
+  --muted: #848cab;
+  --border: #e6e1f4;
+  --primary: #9a8df1;
+  --primary-hover: #8a7de8;
+  --danger: #dc8f9f;
+  --shadow: 10px 10px 22px rgba(227, 218, 236, 0.65), -10px -10px 22px rgba(255, 255, 255, 0.96);
+  --clay-inset: inset 2px 2px 5px rgba(255, 255, 255, 0.98), inset -2px -2px 5px rgba(218, 209, 232, 0.5);
+  --chart-track: #e5e9f8;
+  --chart-bar: #a19df7;
 }
-
 * {
   box-sizing: border-box;
 }
@@ -964,5 +963,6 @@ select {
     justify-content: flex-start;
   }
 }
+
 
 
