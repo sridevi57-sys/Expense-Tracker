@@ -58,12 +58,28 @@ body {
   z-index: 2;
   margin: 0;
   font-size: clamp(2rem, 5vw, 3rem);
+  font-family: "Candara", "Trebuchet MS", "Segoe UI", sans-serif;
+  letter-spacing: 0.06em;
+  padding: 0.45rem 1.2rem;
+  border-radius: 999px;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--surface) 88%, white), color-mix(in srgb, var(--surface-2) 92%, black));
+  border: 1px solid color-mix(in srgb, var(--border) 70%, white);
+  box-shadow: var(--shadow), var(--clay-inset);
   color: var(--text);
 }
 
 .landing-screen .btn {
   position: relative;
   z-index: 2;
+}
+
+.landing-penguin {
+  position: relative;
+  z-index: 2;
+  margin-bottom: -0.35rem;
+  font-size: 2rem;
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.2));
+  animation: penguinBounce 3.2s ease-in-out infinite;
 }
 
 .landing-float-wrap {
@@ -1018,6 +1034,11 @@ select {
 @keyframes floatIcon {
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-10px) rotate(6deg); }
+}
+
+@keyframes penguinBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
 
 @keyframes piggyShake {
