@@ -140,8 +140,14 @@ if (homeEnterBtn && landingScreenEl && mainAppEl) {
 
 if (headerHomeBtn && landingScreenEl && mainAppEl) {
   headerHomeBtn.addEventListener("click", () => {
-    landingScreenEl.style.display = "";
-    mainAppEl.classList.add("app-start-hidden");
+    if (landingScreenEl) {
+      landingScreenEl.style.display = "none";
+    }
+    if (mainAppEl) {
+      mainAppEl.classList.remove("app-start-hidden");
+    }
+    activateTab("add-expense-section");
+    jumpToElement(addExpenseSection);
   });
 }
 
