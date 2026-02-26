@@ -78,6 +78,7 @@ const profileEmailEl = document.getElementById("profile-email");
 const oldDataListEl = document.getElementById("old-data-list");
 const oldDataEmptyEl = document.getElementById("old-data-empty");
 const profileSectionEl = document.getElementById("profile-section");
+const totalIncomeSectionEl = document.getElementById("total-income-section");
 const landingScreenEl = document.getElementById("landing-screen");
 const homeEnterBtn = document.getElementById("home-enter-btn");
 const mainAppEl = document.getElementById("main-app");
@@ -1351,6 +1352,11 @@ function handleSettingsAction(action) {
   if (action === "profile") {
     activateTab("balance-section");
     jumpToElement(profileSectionEl);
+    return;
+  }
+  if (action === "total-income") {
+    activateTab("balance-section");
+    jumpToElement(totalIncomeSectionEl);
     return;
   }
   if (action === "goals") {
