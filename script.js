@@ -17,10 +17,10 @@ const exportCsvBtn = document.getElementById("export-csv");
 const exportJsonBtn = document.getElementById("export-json");
 const exportBackupBtn = document.getElementById("export-backup");
 const emptyState = document.getElementById("empty-state");
-const themeToggleBtn = document.getElementById("theme-toggle");
 const settingsToggleBtn = document.getElementById("settings-toggle");
 const settingsMenuEl = document.getElementById("settings-menu");
 const settingsActionButtons = document.querySelectorAll("[data-settings-action]");
+const settingsThemeBtn = document.querySelector('[data-settings-action="theme"]');
 
 const totalAmountEl = document.getElementById("total-amount");
 const totalCountEl = document.getElementById("total-count");
@@ -151,15 +151,6 @@ quickNavButtons.forEach((button) => {
     activateTab(targetId);
   });
 });
-
-if (themeToggleBtn) {
-  themeToggleBtn.addEventListener("click", () => {
-    activeTheme = activeTheme === "dark" ? "light" : "dark";
-    saveTheme(activeTheme);
-    applyTheme(activeTheme);
-    renderCharts();
-  });
-}
 
 if (settingsToggleBtn && settingsMenuEl) {
   settingsToggleBtn.addEventListener("click", () => {
@@ -669,8 +660,8 @@ function saveTheme(theme) {
 
 function applyTheme(theme) {
   document.documentElement.setAttribute("data-theme", theme);
-  if (themeToggleBtn) {
-    themeToggleBtn.textContent = theme === "dark" ? "Light Mode" : "Dark Mode";
+  if (settingsThemeBtn) {
+    settingsThemeBtn.textContent = theme === "dark" ? "Theme: Dark" : "Theme: Light";
   }
 }
 
@@ -1344,6 +1335,13 @@ function updateOldDataSummary() {
 }
 
 function handleSettingsAction(action) {
+  if (action === "theme") {
+    activeTheme = activeTheme === "dark" ? "light" : "dark";
+    saveTheme(activeTheme);
+    applyTheme(activeTheme);
+    renderCharts();
+    return;
+  }
   if (action === "quick-analysis") {
     activateTab("charts-section");
     jumpToElement(periodAnalysisCardEl);
