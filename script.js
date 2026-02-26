@@ -135,6 +135,8 @@ if (homeEnterBtn && landingScreenEl && mainAppEl) {
   homeEnterBtn.addEventListener("click", () => {
     landingScreenEl.style.display = "none";
     mainAppEl.classList.remove("app-start-hidden");
+    activateTab("add-expense-section");
+    window.scrollTo({ top: 0, behavior: "auto" });
   });
 }
 
