@@ -82,6 +82,7 @@ const totalIncomeSectionEl = document.getElementById("total-income-section");
 const landingScreenEl = document.getElementById("landing-screen");
 const homeEnterBtn = document.getElementById("home-enter-btn");
 const mainAppEl = document.getElementById("main-app");
+const headerAddExpenseBtn = document.getElementById("header-add-expense-btn");
 const goalsCardEl = document.getElementById("goals-card");
 const budgetCardSectionEl = document.getElementById("budget-card");
 const periodAnalysisCardEl = document.getElementById("period-analysis-card");
@@ -134,6 +135,13 @@ if (homeEnterBtn && landingScreenEl && mainAppEl) {
   homeEnterBtn.addEventListener("click", () => {
     landingScreenEl.style.display = "none";
     mainAppEl.classList.remove("app-start-hidden");
+  });
+}
+
+if (headerAddExpenseBtn) {
+  headerAddExpenseBtn.addEventListener("click", () => {
+    activateTab("add-expense-section");
+    jumpToElement(addExpenseSection);
   });
 }
 
