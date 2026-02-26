@@ -31,6 +31,7 @@
           <div class="settings-menu-wrap">
             <button id="settings-toggle" class="theme-toggle" type="button" aria-label="Open settings">Settings</button>
             <div id="settings-menu" class="settings-menu is-hidden">
+              <button type="button" data-settings-action="quick-analysis">Quick Analysis</button>
               <button type="button" data-settings-action="profile">Profile</button>
               <button type="button" data-settings-action="goals">Goals & Savings</button>
               <button type="button" data-settings-action="budget">Budget Monitor</button>
@@ -44,32 +45,6 @@
       </div>
       <p id="header-remaining-balance" class="header-balance">Remaining Balance: &#8377;0.00</p>
     </header>
-
-    <section class="card">
-      <h2 class="title-with-icon"><span class="title-icon">&#129534;</span>Quick Navigation</h2>
-      <div class="guide-grid">
-        <button class="guide-card is-active" type="button" data-target="add-expense-section">
-          <img src="assets/step-add.svg" alt="Add expenses step" />
-          <h3>1. Add Expense</h3>
-          <p>Enter title, amount, category, and date.</p>
-        </button>
-        <button class="guide-card" type="button" data-target="charts-section">
-          <img src="assets/step-visualize.svg" alt="View graphs step" />
-          <h3>2. View Graphs</h3>
-          <p>Track category and date-wise spending.</p>
-        </button>
-        <button class="guide-card" type="button" data-target="expenses-section">
-          <img src="assets/step-manage.svg" alt="Manage expenses step" />
-          <h3>3. Manage List</h3>
-          <p>Delete entries or clear session data.</p>
-        </button>
-        <button class="guide-card" type="button" data-target="balance-section">
-          <img src="assets/step-balance.svg" alt="Balance tracker step" />
-          <h3>4. Balance</h3>
-          <p>Set income and view remaining balance.</p>
-        </button>
-      </div>
-    </section>
 
     <section class="card tab-section expense-form-card" id="add-expense-section">
       <h2 class="title-with-icon"><span class="title-icon">&#10133;</span>Add Expense</h2>

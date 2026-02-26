@@ -1343,6 +1343,11 @@ function updateOldDataSummary() {
 }
 
 function handleSettingsAction(action) {
+  if (action === "quick-analysis") {
+    activateTab("charts-section");
+    jumpToElement(periodAnalysisCardEl);
+    return;
+  }
   if (action === "profile") {
     activateTab("balance-section");
     jumpToElement(profileSectionEl);
