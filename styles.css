@@ -1,33 +1,35 @@
 ﻿:root {
-  --bg: #0c111b;
-  --bg-accent: #17243d;
-  --surface: #121a27;
-  --surface-2: #192335;
-  --text: #e8eef9;
-  --muted: #9daecc;
-  --border: #2a3a56;
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
+  --bg: #161b2c;
+  --bg-accent: #25324f;
+  --surface: #2a3553;
+  --surface-2: #313f62;
+  --text: #edf2ff;
+  --muted: #bec9e6;
+  --border: #3a476a;
+  --primary: #7c8cff;
+  --primary-hover: #6f7fff;
   --danger: #ef4444;
-  --shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  --shadow: 10px 10px 22px rgba(8, 12, 24, 0.55), -8px -8px 20px rgba(62, 78, 120, 0.45);
+  --clay-inset: inset 2px 2px 4px rgba(255, 255, 255, 0.08), inset -2px -2px 4px rgba(11, 15, 28, 0.45);
   --chart-track: #22324a;
-  --chart-bar: #3b82f6;
+  --chart-bar: #8a9aff;
 }
 
 html[data-theme="light"] {
-  --bg: #f0f4fb;
-  --bg-accent: #dce8ff;
-  --surface: #ffffff;
-  --surface-2: #f7faff;
-  --text: #122032;
-  --muted: #5c6e86;
-  --border: #d7e2f2;
-  --primary: #1f6feb;
-  --primary-hover: #1557bb;
+  --bg: #dde6f8;
+  --bg-accent: #cddaf4;
+  --surface: #e6eeff;
+  --surface-2: #f0f5ff;
+  --text: #1d2a48;
+  --muted: #5e6d89;
+  --border: #c8d6ee;
+  --primary: #6078ff;
+  --primary-hover: #536de8;
   --danger: #c62828;
-  --shadow: 0 10px 26px rgba(27, 60, 112, 0.12);
+  --shadow: 10px 10px 22px rgba(163, 181, 216, 0.75), -10px -10px 20px rgba(255, 255, 255, 0.9);
+  --clay-inset: inset 2px 2px 4px rgba(255, 255, 255, 0.95), inset -2px -2px 4px rgba(170, 188, 221, 0.65);
   --chart-track: #d5e2f4;
-  --chart-bar: #1f6feb;
+  --chart-bar: #6078ff;
 }
 
 * {
@@ -37,7 +39,7 @@ html[data-theme="light"] {
 body {
   margin: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: radial-gradient(circle at top right, var(--bg-accent), var(--bg) 45%);
+  background: radial-gradient(circle at 15% 10%, var(--bg-accent), var(--bg) 60%);
   color: var(--text);
 }
 
@@ -78,8 +80,8 @@ body {
   min-width: 210px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  box-shadow: var(--shadow);
+  border-radius: 18px;
+  box-shadow: var(--shadow), var(--clay-inset);
   padding: 0.4rem;
   z-index: 20;
 }
@@ -107,9 +109,10 @@ body {
   border: 1px solid var(--border);
   background: var(--surface-2);
   color: var(--text);
-  border-radius: 10px;
+  border-radius: 18px;
   padding: 0.5rem 0.75rem;
   cursor: pointer;
+  box-shadow: var(--shadow), var(--clay-inset);
 }
 
 .title-with-icon {
@@ -139,9 +142,9 @@ body {
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 22px;
   padding: 1rem;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow), var(--clay-inset);
 }
 
 .expense-form-card {
@@ -285,20 +288,22 @@ input,
 select {
   width: 100%;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 18px;
   padding: 0.65rem 0.75rem;
   background: var(--surface-2);
   color: var(--text);
+  box-shadow: var(--clay-inset);
 }
 
 .btn {
   width: fit-content;
   border: none;
-  border-radius: 10px;
+  border-radius: 18px;
   padding: 0.65rem 1rem;
   color: #fff;
   background: var(--primary);
   cursor: pointer;
+  box-shadow: var(--shadow);
 }
 
 .btn:hover {
@@ -313,6 +318,7 @@ select {
   background: var(--surface-2);
   color: var(--text);
   border: 1px solid var(--border);
+  box-shadow: var(--shadow), var(--clay-inset);
 }
 
 .summary-grid {
@@ -341,10 +347,10 @@ select {
   text-align: left;
   text-decoration: none;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 18px;
   padding: 0.75rem;
   background: var(--surface-2);
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   color: inherit;
   cursor: pointer;
 }
@@ -363,7 +369,7 @@ select {
   width: 100%;
   height: 110px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 18px;
   border: 1px solid var(--border);
 }
 
@@ -389,7 +395,7 @@ select {
   width: 100%;
   height: 260px;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 16px;
   background: var(--surface-2);
   margin-top: 0.75rem;
 }
@@ -413,7 +419,7 @@ select {
   width: 100%;
   height: 100px;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 18px;
   background: var(--surface-2);
   margin-top: 0.65rem;
 }
@@ -441,7 +447,7 @@ select {
 .liquid-shell {
   margin-top: 0.9rem;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 18px;
   height: 150px;
   background: var(--surface-2);
   position: relative;
@@ -543,7 +549,7 @@ select {
 
 .period-item {
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 16px;
   background: var(--surface-2);
   padding: 0.8rem;
 }
@@ -605,7 +611,7 @@ select {
 
 .expense-item {
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 0.8rem;
   display: grid;
   gap: 0.5rem;
@@ -689,7 +695,7 @@ select {
   border: 1px solid #ef4444;
   background: rgba(239, 68, 68, 0.12);
   color: #fecaca;
-  border-radius: 10px;
+  border-radius: 18px;
   padding: 0.6rem 0.75rem;
 }
 
@@ -715,7 +721,7 @@ select {
 
 .old-data-list li {
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 18px;
   background: var(--surface-2);
   padding: 0.55rem 0.7rem;
   color: var(--text);
@@ -891,14 +897,14 @@ select {
 }
 
 @keyframes overspendPulse {
-  0%, 100% { box-shadow: var(--shadow); border-color: var(--border); }
+  0%, 100% { box-shadow: var(--shadow), var(--clay-inset); border-color: var(--border); }
   50% { box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.42), var(--shadow); border-color: #ef4444; }
 }
 
 @keyframes tipReveal {
   0% { transform: translateY(12px); opacity: 0.6; box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
   65% { transform: translateY(0); opacity: 1; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.26); }
-  100% { box-shadow: var(--shadow); }
+  100% { box-shadow: var(--shadow), var(--clay-inset); }
 }
 
 @keyframes lightningFlash {
@@ -958,3 +964,5 @@ select {
     justify-content: flex-start;
   }
 }
+
+
