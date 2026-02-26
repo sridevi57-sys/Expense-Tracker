@@ -78,6 +78,9 @@ const profileEmailEl = document.getElementById("profile-email");
 const oldDataListEl = document.getElementById("old-data-list");
 const oldDataEmptyEl = document.getElementById("old-data-empty");
 const profileSectionEl = document.getElementById("profile-section");
+const landingScreenEl = document.getElementById("landing-screen");
+const homeEnterBtn = document.getElementById("home-enter-btn");
+const mainAppEl = document.getElementById("main-app");
 const goalsCardEl = document.getElementById("goals-card");
 const budgetCardSectionEl = document.getElementById("budget-card");
 const periodAnalysisCardEl = document.getElementById("period-analysis-card");
@@ -125,6 +128,13 @@ if (budgetCategoryEl && budgetAmountEl) {
 applyTheme(activeTheme);
 activateTab("add-expense-section");
 render();
+
+if (homeEnterBtn && landingScreenEl && mainAppEl) {
+  homeEnterBtn.addEventListener("click", () => {
+    landingScreenEl.style.display = "none";
+    mainAppEl.classList.remove("app-start-hidden");
+  });
+}
 
 window.addEventListener("resize", () => {
   renderCharts();
