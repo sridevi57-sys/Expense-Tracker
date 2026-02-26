@@ -81,6 +81,7 @@ const profileSectionEl = document.getElementById("profile-section");
 const totalIncomeSectionEl = document.getElementById("total-income-section");
 const landingScreenEl = document.getElementById("landing-screen");
 const homeEnterBtn = document.getElementById("home-enter-btn");
+const headerHomeBtn = document.getElementById("header-home-btn");
 const mainAppEl = document.getElementById("main-app");
 const goalsCardEl = document.getElementById("goals-card");
 const budgetCardSectionEl = document.getElementById("budget-card");
@@ -134,6 +135,13 @@ if (homeEnterBtn && landingScreenEl && mainAppEl) {
   homeEnterBtn.addEventListener("click", () => {
     landingScreenEl.style.display = "none";
     mainAppEl.classList.remove("app-start-hidden");
+  });
+}
+
+if (headerHomeBtn && landingScreenEl && mainAppEl) {
+  headerHomeBtn.addEventListener("click", () => {
+    landingScreenEl.style.display = "";
+    mainAppEl.classList.add("app-start-hidden");
   });
 }
 
