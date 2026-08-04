@@ -1,4 +1,4 @@
-﻿const STORAGE_KEY = "expense-tracker-session-v1";
+const STORAGE_KEY = "expense-tracker-session-v1";
 const INCOME_KEY = "expense-tracker-income-v1";
 const THEME_KEY = "expense-tracker-theme-v1";
 const GOALS_KEY = "expense-tracker-goals-v1";
@@ -519,7 +519,7 @@ if (exportBackupBtn) {
 
 function loadExpenses() {
   try {
-    const raw = sessionStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
       return [];
     }
@@ -543,11 +543,11 @@ function loadExpenses() {
 }
 
 function saveExpenses(data) {
-  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
 function loadIncome() {
-  const raw = sessionStorage.getItem(INCOME_KEY);
+  const raw = localStorage.getItem(INCOME_KEY);
   const parsed = Number(raw);
   if (!Number.isFinite(parsed) || parsed < 0) {
     return 0;
@@ -557,11 +557,11 @@ function loadIncome() {
 }
 
 function saveIncome(value) {
-  sessionStorage.setItem(INCOME_KEY, String(value));
+  localStorage.setItem(INCOME_KEY, String(value));
 }
 
 function loadCategoryBudgets() {
-  const raw = sessionStorage.getItem("expense-tracker-category-budgets-v1");
+  const raw = localStorage.getItem("expense-tracker-category-budgets-v1");
   if (!raw) {
     return {};
   }
@@ -577,7 +577,7 @@ function loadCategoryBudgets() {
 }
 
 function saveCategoryBudgets(budgets) {
-  sessionStorage.setItem("expense-tracker-category-budgets-v1", JSON.stringify(budgets));
+  localStorage.setItem("expense-tracker-category-budgets-v1", JSON.stringify(budgets));
 }
 
 function loadGoalsState() {
@@ -587,7 +587,7 @@ function loadGoalsState() {
     currentSavings: 0,
     emergencyTarget: 0,
   };
-  const raw = sessionStorage.getItem(GOALS_KEY);
+  const raw = localStorage.getItem(GOALS_KEY);
   if (!raw) {
     return fallback;
   }
@@ -608,12 +608,12 @@ function loadGoalsState() {
 }
 
 function saveGoalsState(value) {
-  sessionStorage.setItem(GOALS_KEY, JSON.stringify(value));
+  localStorage.setItem(GOALS_KEY, JSON.stringify(value));
 }
 
 function loadProfileState() {
   const fallback = { name: "", email: "" };
-  const raw = sessionStorage.getItem(PROFILE_KEY);
+  const raw = localStorage.getItem(PROFILE_KEY);
   if (!raw) {
     return fallback;
   }
@@ -632,7 +632,7 @@ function loadProfileState() {
 }
 
 function saveProfileState(value) {
-  sessionStorage.setItem(PROFILE_KEY, JSON.stringify(value));
+  localStorage.setItem(PROFILE_KEY, JSON.stringify(value));
 }
 
 function hydrateGoalsForm() {
@@ -660,12 +660,12 @@ function hydrateProfileForm() {
 }
 
 function loadTheme() {
-  const theme = sessionStorage.getItem(THEME_KEY);
+  const theme = localStorage.getItem(THEME_KEY);
   return theme === "light" ? "light" : "dark";
 }
 
 function saveTheme(theme) {
-  sessionStorage.setItem(THEME_KEY, theme);
+  localStorage.setItem(THEME_KEY, theme);
 }
 
 function applyTheme(theme) {
