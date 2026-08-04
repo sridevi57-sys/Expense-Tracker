@@ -89,6 +89,7 @@ const periodAnalysisCardEl = document.getElementById("period-analysis-card");
 const expensesSectionEl = document.getElementById("expenses-section");
 const oldDataSectionEl = document.getElementById("old-data-section");
 const downloadOptionsEl = document.getElementById("download-options");
+const connectionStatusEl = document.getElementById("connection-status");
 
 const quickNavButtons = document.querySelectorAll(".guide-card[data-target]");
 const tabSections = {
@@ -106,6 +107,17 @@ if (dateInput) {
 
 const API_HOST = "http://localhost:5000";
 
+function updateConnectionStatus(isConnected) {
+  if (!connectionStatusEl) return;
+  if (isConnected) {
+    connectionStatusEl.className = "connection-status-pill connected";
+    connectionStatusEl.textContent = "🟢 Connected";
+  } else {
+    connectionStatusEl.className = "connection-status-pill offline";
+    connectionStatusEl.textContent = "⚪ Offline";
+  }
+}
+
 async function apiFetch(path, options = {}) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), 2000); // 2-second timeout
@@ -122,9 +134,11 @@ async function apiFetch(path, options = {}) {
     if (!res.ok) {
       throw new Error(`HTTP error! status: ${res.status}`);
     }
+    updateConnectionStatus(true);
     return await res.json();
   } catch (err) {
     clearTimeout(id);
+    updateConnectionStatus(false);
     console.warn(`API call failed for ${path}:`, err.message);
     throw err;
   }

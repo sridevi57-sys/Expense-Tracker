@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --bg: #1a1328;
   --bg-accent: #2c1f45;
   --surface: #2a1f3f;
@@ -228,6 +228,30 @@ body {
   padding: 0.5rem 0.75rem;
   cursor: pointer;
   box-shadow: var(--shadow), var(--clay-inset);
+}
+
+.connection-status-pill {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 99px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.connection-status-pill.connected {
+  color: #a8f5b8;
+  border-color: #2e6939;
+  background: rgba(46, 105, 57, 0.2);
+}
+.connection-status-pill.offline {
+  color: #ffc2d1;
+  border-color: #7d2a3f;
+  background: rgba(125, 42, 63, 0.2);
 }
 
 .title-with-icon {
