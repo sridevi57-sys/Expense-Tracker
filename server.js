@@ -54,6 +54,45 @@ app.get('/api/expenses', (req, res) => {
   });
 });
 
+app.put('/api/expenses', (req, res) => {
+  const expenses = req.body;
+  if (!Array.isArray(expenses)) {
+    return res.status(400).json({ error: 'Expected an array of expenses' });
+  }
+
+  db.serialize(() => {
+    db.run('BEGIN TRANSACTION');
+    db.run('DELETE FROM expenses', [], (err) => {
+      if (err) {
+        db.run('ROLLBACK');
+        return res.status(500).json({ error: err.message });
+      }
+    });
+
+    const stmt = db.prepare('INSERT INTO expenses (id, title, amount, category, date, notes) VALUES (?, ?, ?, ?, ?, ?)');
+    let hasError = false;
+    for (const exp of expenses) {
+      stmt.run([exp.id, exp.title, exp.amount, exp.category, exp.date, exp.notes || ''], (err) => {
+        if (err) {
+          hasError = true;
+        }
+      });
+    }
+    stmt.finalize((err) => {
+      if (err || hasError) {
+        db.run('ROLLBACK');
+        return res.status(500).json({ error: 'Failed to insert some expenses during sync' });
+      }
+      db.run('COMMIT', (commitErr) => {
+        if (commitErr) {
+          return res.status(500).json({ error: commitErr.message });
+        }
+        res.json({ message: 'Expenses synced successfully' });
+      });
+    });
+  });
+});
+
 app.post('/api/expenses', (req, res) => {
   const { id, title, amount, category, date, notes } = req.body;
   if (!id || !title || amount === undefined || !category || !date) {

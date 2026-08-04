@@ -104,32 +104,161 @@ if (dateInput) {
   dateInput.value = new Date().toISOString().split("T")[0];
 }
 
-let expenses = loadExpenses();
-let totalIncome = loadIncome();
+const API_HOST = "http://localhost:5000";
+
+async function apiFetch(path, options = {}) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), 2000); // 2-second timeout
+  try {
+    const res = await fetch(`${API_HOST}${path}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {}),
+      },
+      signal: controller.signal,
+    });
+    clearTimeout(id);
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    return await res.json();
+  } catch (err) {
+    clearTimeout(id);
+    console.warn(`API call failed for ${path}:`, err.message);
+    throw err;
+  }
+}
+
+async function syncExpensesToServer(data) {
+  try {
+    await apiFetch("/api/expenses", {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  } catch (err) {
+    console.error("Failed to sync expenses to server", err);
+  }
+}
+
+async function syncIncomeToServer(value) {
+  try {
+    await apiFetch("/api/income", {
+      method: "POST",
+      body: JSON.stringify({ income: value }),
+    });
+  } catch (err) {
+    console.error("Failed to sync income to server", err);
+  }
+}
+
+async function syncCategoryBudgetsToServer(budgets) {
+  try {
+    await apiFetch("/api/budgets", {
+      method: "POST",
+      body: JSON.stringify({ budgets }),
+    });
+  } catch (err) {
+    console.error("Failed to sync budgets to server", err);
+  }
+}
+
+async function syncGoalsStateToServer(goals) {
+  try {
+    await apiFetch("/api/goals", {
+      method: "POST",
+      body: JSON.stringify({ goals }),
+    });
+  } catch (err) {
+    console.error("Failed to sync goals to server", err);
+  }
+}
+
+async function syncProfileStateToServer(profile) {
+  try {
+    await apiFetch("/api/profile", {
+      method: "POST",
+      body: JSON.stringify({ profile }),
+    });
+  } catch (err) {
+    console.error("Failed to sync profile to server", err);
+  }
+}
+
+let expenses = [];
+let totalIncome = 0;
 let categoryBarHitboxes = [];
 let activeTheme = loadTheme();
-let categoryBudgets = loadCategoryBudgets();
+let categoryBudgets = {};
 let monthOffset = 0;
 let donutAnimationFrame = null;
 let sparklineFrame = null;
-let goalsState = loadGoalsState();
-let wasGoalReached = goalsState.goalTarget > 0 && goalsState.currentSavings >= goalsState.goalTarget;
-let wasEmergencyUnlocked = goalsState.emergencyTarget > 0 && goalsState.currentSavings >= goalsState.emergencyTarget;
-let profileState = loadProfileState();
+let goalsState = { goalName: "", goalTarget: 0, currentSavings: 0, emergencyTarget: 0 };
+let wasGoalReached = false;
+let wasEmergencyUnlocked = false;
+let profileState = { name: "", email: "" };
 let dragSourceId = null;
 
-if (incomeInput) {
-  incomeInput.value = totalIncome ? String(totalIncome) : "";
-}
-hydrateGoalsForm();
-hydrateProfileForm();
-if (budgetCategoryEl && budgetAmountEl) {
-  budgetAmountEl.value = String(categoryBudgets[budgetCategoryEl.value] || "");
+async function initAppData() {
+  try {
+    const serverExpenses = await apiFetch("/api/expenses");
+    expenses = serverExpenses;
+    // Save to local cache
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(expenses));
+  } catch {
+    expenses = loadExpenses();
+  }
+
+  try {
+    const { income } = await apiFetch("/api/income");
+    totalIncome = income;
+    localStorage.setItem(INCOME_KEY, String(totalIncome));
+  } catch {
+    totalIncome = loadIncome();
+  }
+
+  try {
+    const { budgets } = await apiFetch("/api/budgets");
+    categoryBudgets = budgets;
+    localStorage.setItem("expense-tracker-category-budgets-v1", JSON.stringify(categoryBudgets));
+  } catch {
+    categoryBudgets = loadCategoryBudgets();
+  }
+
+  try {
+    const { goals } = await apiFetch("/api/goals");
+    goalsState = goals;
+    localStorage.setItem(GOALS_KEY, JSON.stringify(goalsState));
+  } catch {
+    goalsState = loadGoalsState();
+  }
+
+  try {
+    const { profile } = await apiFetch("/api/profile");
+    profileState = profile;
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(profileState));
+  } catch {
+    profileState = loadProfileState();
+  }
+
+  if (incomeInput) {
+    incomeInput.value = totalIncome ? String(totalIncome) : "";
+  }
+  hydrateGoalsForm();
+  hydrateProfileForm();
+  if (budgetCategoryEl && budgetAmountEl) {
+    budgetAmountEl.value = String(categoryBudgets[budgetCategoryEl.value] || "");
+  }
+
+  wasGoalReached = goalsState.goalTarget > 0 && goalsState.currentSavings >= goalsState.goalTarget;
+  wasEmergencyUnlocked = goalsState.emergencyTarget > 0 && goalsState.currentSavings >= goalsState.emergencyTarget;
+
+  render();
 }
 
 applyTheme(activeTheme);
 activateTab("add-expense-section");
-render();
+initAppData();
 
 if (homeEnterBtn && landingScreenEl && mainAppEl) {
   homeEnterBtn.addEventListener("click", () => {
@@ -544,6 +673,7 @@ function loadExpenses() {
 
 function saveExpenses(data) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  syncExpensesToServer(data);
 }
 
 function loadIncome() {
@@ -558,6 +688,7 @@ function loadIncome() {
 
 function saveIncome(value) {
   localStorage.setItem(INCOME_KEY, String(value));
+  syncIncomeToServer(value);
 }
 
 function loadCategoryBudgets() {
@@ -578,6 +709,7 @@ function loadCategoryBudgets() {
 
 function saveCategoryBudgets(budgets) {
   localStorage.setItem("expense-tracker-category-budgets-v1", JSON.stringify(budgets));
+  syncCategoryBudgetsToServer(budgets);
 }
 
 function loadGoalsState() {
@@ -609,6 +741,7 @@ function loadGoalsState() {
 
 function saveGoalsState(value) {
   localStorage.setItem(GOALS_KEY, JSON.stringify(value));
+  syncGoalsStateToServer(value);
 }
 
 function loadProfileState() {
@@ -633,6 +766,7 @@ function loadProfileState() {
 
 function saveProfileState(value) {
   localStorage.setItem(PROFILE_KEY, JSON.stringify(value));
+  syncProfileStateToServer(value);
 }
 
 function hydrateGoalsForm() {
