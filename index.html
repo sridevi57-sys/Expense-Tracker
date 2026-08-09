@@ -18,8 +18,69 @@
       <span class="float-icon icon-4">&#11088;</span>
     </div>
     <div class="landing-penguin" aria-hidden="true">&#128039;</div>
-    <h1 class="landing-title">Expense Tracker</h1>
-    <button id="home-enter-btn" class="btn" type="button">Home</button>
+    <h1 class="landing-title" style="margin-bottom: 1.5rem;">Expense Tracker</h1>
+    
+    <!-- Auth Card Panel -->
+    <div class="auth-card" id="auth-card">
+      
+      <!-- Login Section -->
+      <div class="auth-panel" id="login-panel">
+        <h2 style="margin-top: 0;">Secure Login</h2>
+        <form id="login-form" class="form" autocomplete="off">
+          <div class="field">
+            <label for="login-email">Email Address</label>
+            <input id="login-email" type="email" placeholder="you@example.com" required />
+          </div>
+          <div class="field">
+            <label for="login-password">Password</label>
+            <input id="login-password" type="password" placeholder="••••••••" required />
+          </div>
+          <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Login</button>
+        </form>
+        <p class="auth-switch" style="margin-top: 1rem; font-size: 0.85rem; color: var(--muted);">Don't have an account? <a href="#" id="go-to-register" style="color: var(--primary);">Register here</a></p>
+      </div>
+
+      <!-- Register Section -->
+      <div class="auth-panel is-hidden" id="register-panel">
+        <h2 style="margin-top: 0;">Create Account</h2>
+        <form id="register-form" class="form" autocomplete="off">
+          <div class="field">
+            <label for="register-username">Username</label>
+            <input id="register-username" type="text" placeholder="username" required />
+          </div>
+          <div class="field">
+            <label for="register-email">Email Address</label>
+            <input id="register-email" type="email" placeholder="email@example.com" required />
+          </div>
+          <div class="field">
+            <label for="register-password">Password</label>
+            <input id="register-password" type="password" placeholder="Min 6 characters" minlength="6" required />
+          </div>
+          <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Send OTP Code</button>
+        </form>
+        <p class="auth-switch" style="margin-top: 1rem; font-size: 0.85rem; color: var(--muted);">Already have an account? <a href="#" id="go-to-login" style="color: var(--primary);">Login here</a></p>
+      </div>
+
+      <!-- OTP Section -->
+      <div class="auth-panel is-hidden" id="otp-panel">
+        <h2 style="margin-top: 0;">Email Verification</h2>
+        <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem;">
+          We sent a 6-digit OTP code to <span id="otp-target-email" style="color: var(--primary); font-weight: bold;"></span>.
+        </p>
+        <p id="otp-console-alert" style="font-size: 0.8rem; color: var(--danger); margin-bottom: 1rem; display: none;">
+          ⚠️ Mail delivery skipped. Read OTP from server terminal console!
+        </p>
+        <form id="otp-form" class="form" autocomplete="off">
+          <div class="field">
+            <label for="otp-code">Enter OTP Code</label>
+            <input id="otp-code" type="text" placeholder="123456" pattern="\d{6}" maxlength="6" required style="text-align: center; font-size: 1.25rem; letter-spacing: 0.35rem;" />
+          </div>
+          <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Verify & Activate</button>
+        </form>
+        <p class="auth-switch" style="margin-top: 1rem; font-size: 0.85rem;"><a href="#" id="otp-back-to-register" style="color: var(--muted);">← Back to Register</a></p>
+      </div>
+
+    </div>
   </section>
 
   <main id="main-app" class="app app-start-hidden">
@@ -28,6 +89,7 @@
         <h1>Expense Tracker</h1>
         <span id="connection-status" class="connection-status-pill offline">⚪ Connecting...</span>
         <div class="header-actions">
+          <button id="logout-btn" class="theme-toggle" type="button" style="border-color: var(--danger); color: var(--danger);">Logout</button>
           <button id="header-add-expense-btn" class="theme-toggle" type="button" aria-label="Go to add expense">Add Expense</button>
           <div class="settings-menu-wrap">
             <button id="settings-toggle" class="theme-toggle" type="button" aria-label="Open settings">Settings</button>

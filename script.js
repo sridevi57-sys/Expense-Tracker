@@ -121,13 +121,21 @@ function updateConnectionStatus(isConnected) {
 async function apiFetch(path, options = {}) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), 2000); // 2-second timeout
+  const token = localStorage.getItem("auth-token");
+  
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options.headers || {}),
+  };
+  
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   try {
     const res = await fetch(`${API_HOST}${path}`, {
       ...options,
-      headers: {
-        "Content-Type": "application/json",
-        ...(options.headers || {}),
-      },
+      headers,
       signal: controller.signal,
     });
     clearTimeout(id);
@@ -270,18 +278,177 @@ async function initAppData() {
   render();
 }
 
-applyTheme(activeTheme);
-activateTab("add-expense-section");
-initAppData();
+const loginForm = document.getElementById("login-form");
+const registerForm = document.getElementById("register-form");
+const otpForm = document.getElementById("otp-form");
 
-if (homeEnterBtn && landingScreenEl && mainAppEl) {
-  homeEnterBtn.addEventListener("click", () => {
-    landingScreenEl.style.display = "none";
-    mainAppEl.classList.remove("app-start-hidden");
-    activateTab("add-expense-section");
-    window.scrollTo({ top: 0, behavior: "auto" });
+const loginPanel = document.getElementById("login-panel");
+const registerPanel = document.getElementById("register-panel");
+const otpPanel = document.getElementById("otp-panel");
+
+const goToRegister = document.getElementById("go-to-register");
+const goToLogin = document.getElementById("go-to-login");
+const otpBackToRegister = document.getElementById("otp-back-to-register");
+const otpTargetEmail = document.getElementById("otp-target-email");
+const otpConsoleAlert = document.getElementById("otp-console-alert");
+const logoutBtn = document.getElementById("logout-btn");
+
+let registerEmail = "";
+
+// Auth panel toggling
+if (goToRegister && registerPanel && loginPanel) {
+  goToRegister.addEventListener("click", (e) => {
+    e.preventDefault();
+    loginPanel.classList.add("is-hidden");
+    registerPanel.classList.remove("is-hidden");
   });
 }
+
+if (goToLogin && loginPanel && registerPanel) {
+  goToLogin.addEventListener("click", (e) => {
+    e.preventDefault();
+    registerPanel.classList.add("is-hidden");
+    loginPanel.classList.remove("is-hidden");
+  });
+}
+
+if (otpBackToRegister && registerPanel && otpPanel) {
+  otpBackToRegister.addEventListener("click", (e) => {
+    e.preventDefault();
+    otpPanel.classList.add("is-hidden");
+    registerPanel.classList.remove("is-hidden");
+  });
+}
+
+// Form Handlers
+if (registerForm) {
+  registerForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const username = document.getElementById("register-username").value.trim();
+    const email = document.getElementById("register-email").value.trim();
+    const password = document.getElementById("register-password").value;
+
+    try {
+      const data = await apiFetch("/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify({ username, email, password }),
+      });
+      alert(data.message);
+      registerEmail = email;
+      if (otpTargetEmail) {
+        otpTargetEmail.textContent = email;
+      }
+      if (otpConsoleAlert) {
+        otpConsoleAlert.style.display = data.otpLoggedConsole ? "block" : "none";
+      }
+      if (registerPanel && otpPanel) {
+        registerPanel.classList.add("is-hidden");
+        otpPanel.classList.remove("is-hidden");
+      }
+    } catch (err) {
+      alert(err.error || "Registration failed");
+    }
+  });
+}
+
+if (otpForm) {
+  otpForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const otp = document.getElementById("otp-code").value.trim();
+
+    try {
+      const data = await apiFetch("/api/auth/verify", {
+        method: "POST",
+        body: JSON.stringify({ email: registerEmail, otp }),
+      });
+      alert(data.message);
+      if (otpPanel && loginPanel) {
+        otpPanel.classList.add("is-hidden");
+        loginPanel.classList.remove("is-hidden");
+      }
+    } catch (err) {
+      alert(err.error || "OTP verification failed");
+    }
+  });
+}
+
+if (loginForm) {
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value;
+
+    try {
+      const data = await apiFetch("/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
+      localStorage.setItem("auth-token", data.token);
+      
+      // Load app data
+      await initAppData();
+
+      // Show Main Application Screen
+      if (landingScreenEl && mainAppEl) {
+        landingScreenEl.style.display = "none";
+        mainAppEl.classList.remove("app-start-hidden");
+        activateTab("add-expense-section");
+        window.scrollTo({ top: 0, behavior: "auto" });
+      }
+    } catch (err) {
+      alert(err.error || "Login failed");
+    }
+  });
+}
+
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    localStorage.removeItem("auth-token");
+    // Clear lists
+    expenses = [];
+    totalIncome = 0;
+    categoryBudgets = {};
+    goalsState = { goalName: "", goalTarget: 0, currentSavings: 0, emergencyTarget: 0 };
+    profileState = { name: "", email: "" };
+    
+    // Redirect
+    if (landingScreenEl && mainAppEl) {
+      mainAppEl.classList.add("app-start-hidden");
+      landingScreenEl.style.display = "grid";
+      // Clear forms
+      if (loginForm) loginForm.reset();
+      if (registerForm) registerForm.reset();
+      if (otpForm) otpForm.reset();
+      if (loginPanel && registerPanel && otpPanel) {
+        loginPanel.classList.remove("is-hidden");
+        registerPanel.classList.add("is-hidden");
+        otpPanel.classList.add("is-hidden");
+      }
+    }
+  });
+}
+
+// Initial session check
+function checkAuthSession() {
+  const token = localStorage.getItem("auth-token");
+  if (token) {
+    if (landingScreenEl && mainAppEl) {
+      landingScreenEl.style.display = "none";
+      mainAppEl.classList.remove("app-start-hidden");
+      activateTab("add-expense-section");
+      initAppData();
+    }
+  } else {
+    if (landingScreenEl && mainAppEl) {
+      mainAppEl.classList.add("app-start-hidden");
+      landingScreenEl.style.display = "grid";
+    }
+  }
+}
+
+applyTheme(activeTheme);
+activateTab("add-expense-section");
+checkAuthSession();
 
 if (headerAddExpenseBtn) {
   headerAddExpenseBtn.addEventListener("click", () => {
