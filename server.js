@@ -60,6 +60,17 @@ app.put('/api/expenses', (req, res) => {
     return res.status(400).json({ error: 'Expected an array of expenses' });
   }
 
+  // Validate all items before database modification
+  for (const exp of expenses) {
+    if (!exp.id || typeof exp.id !== 'string' ||
+        !exp.title || typeof exp.title !== 'string' ||
+        exp.amount === undefined || typeof exp.amount !== 'number' || isNaN(exp.amount) || exp.amount <= 0 ||
+        !exp.category || typeof exp.category !== 'string' ||
+        !exp.date || typeof exp.date !== 'string') {
+      return res.status(400).json({ error: 'Invalid expense item in the sync list' });
+    }
+  }
+
   db.serialize(() => {
     db.run('BEGIN TRANSACTION');
     db.run('DELETE FROM expenses', [], (err) => {
@@ -95,8 +106,12 @@ app.put('/api/expenses', (req, res) => {
 
 app.post('/api/expenses', (req, res) => {
   const { id, title, amount, category, date, notes } = req.body;
-  if (!id || !title || amount === undefined || !category || !date) {
-    return res.status(400).json({ error: 'Missing required fields' });
+  if (!id || typeof id !== 'string' ||
+      !title || typeof title !== 'string' ||
+      amount === undefined || typeof amount !== 'number' || isNaN(amount) || amount <= 0 ||
+      !category || typeof category !== 'string' ||
+      !date || typeof date !== 'string') {
+    return res.status(400).json({ error: 'Missing or invalid fields in expense payload' });
   }
 
   db.run(
