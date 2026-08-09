@@ -140,7 +140,14 @@ async function apiFetch(path, options = {}) {
     });
     clearTimeout(id);
     if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
+      let message = `HTTP error! status: ${res.status}`;
+      try {
+        const data = await res.json();
+        if (data && data.error) {
+          message = data.error;
+        }
+      } catch (e) {}
+      throw new Error(message);
     }
     updateConnectionStatus(true);
     return await res.json();
@@ -346,7 +353,7 @@ if (registerForm) {
         otpPanel.classList.remove("is-hidden");
       }
     } catch (err) {
-      alert(err.error || "Registration failed");
+      alert(err.message);
     }
   });
 }
@@ -367,7 +374,7 @@ if (otpForm) {
         loginPanel.classList.remove("is-hidden");
       }
     } catch (err) {
-      alert(err.error || "OTP verification failed");
+      alert(err.message);
     }
   });
 }
@@ -396,7 +403,7 @@ if (loginForm) {
         window.scrollTo({ top: 0, behavior: "auto" });
       }
     } catch (err) {
-      alert(err.error || "Login failed");
+      alert(err.message);
     }
   });
 }
